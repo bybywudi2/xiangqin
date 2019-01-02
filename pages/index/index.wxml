@@ -1,4 +1,8 @@
 <!--index.wxml-->
+<van-notice-bar
+  mode="closeable"
+  text="检测到还未进行实名注册,请先前往注册"
+/>
 <view class="container">
   <view class="userinfo">
     <button wx:if="{{(!hasUserInfo && canIUse) || openid=='1'}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 开启恋爱之旅 </button>
@@ -8,13 +12,12 @@
        <button open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 开启匹配 </button>
     </block>
   </view>
-
   <view class="usermotto">
-    <text bindtap="toRegist" class="user-motto">{{motto}}</text>
+    <van-tabbar active="{{ active }}" bind:change="onChange">
+    <van-tabbar-item icon="home-o">主页</van-tabbar-item>
+    <van-tabbar-item icon="search" dot>搜索</van-tabbar-item>
+    <van-tabbar-item icon="friends-o">联系人</van-tabbar-item>
+    <van-tabbar-item icon="setting-o">设置</van-tabbar-item>
+    </van-tabbar>
   </view>
-  <view class="openid">
-    <text class="openid">{{openid}}</text>
-  </view>
-
-
 </view>

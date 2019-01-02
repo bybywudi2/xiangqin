@@ -1,5 +1,6 @@
 //index.js
 //获取应用实例
+import Notify from '../../components/van/dist/notify/notify';
 const app = getApp()
 
 Page({
@@ -34,7 +35,6 @@ Page({
   },
 
   onLoad: function () {
-    
     var that = this;
       wx.getStorage({
         key: 'openid',
@@ -69,12 +69,9 @@ Page({
           })
         }
       })
-      
     }
-
   },
   getUserInfo: function(e) {
-
     var that = this;
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
