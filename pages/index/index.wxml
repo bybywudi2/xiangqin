@@ -1,0 +1,20 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <button wx:if="{{(!hasUserInfo && canIUse) || openid=='1'}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 开启恋爱之旅 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+       <button open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 开启匹配 </button>
+    </block>
+  </view>
+
+  <view class="usermotto">
+    <text bindtap="toRegist" class="user-motto">{{motto}}</text>
+  </view>
+  <view class="openid">
+    <text class="openid">{{openid}}</text>
+  </view>
+
+
+</view>
