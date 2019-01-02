@@ -1,6 +1,7 @@
 <!--pages/regist/regist.wxml-->
 <view class="viewTitle">
     <text class="view-Name">信息注册</text>
+    <van-button type="primary">按钮</van-button>
     <view class="lineView"></view>
 </view>
 <!--这里用form，name=“nameName1”可以作为form的属性进行 
