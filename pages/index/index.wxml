@@ -10,12 +10,14 @@
       <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
       <text class="userinfo-nickname">{{userInfo.nickName}}</text>
        <button open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 开启匹配 </button>
+       <text bindtap="toRegist" class="user-motto">注册</text> 
     </block>
   </view>
   <view class="usermotto">
+    
     <van-tabbar active="{{ active }}" bind:change="onChange">
     <van-tabbar-item icon="home-o">主页</van-tabbar-item>
-    <van-tabbar-item icon="search" dot>搜索</van-tabbar-item>
+    <van-tabbar-item icon="search" dot>注册</van-tabbar-item>
     <van-tabbar-item icon="friends-o">联系人</van-tabbar-item>
     <van-tabbar-item icon="setting-o">设置</van-tabbar-item>
     </van-tabbar>

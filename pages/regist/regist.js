@@ -58,57 +58,62 @@ Page({
       },
       success: function (res) {
         console.info("succ!");
+
+        wx.uploadFile(
+          {
+            url: 'http://localhost:8001/regist/photoupload',
+            filePath: e.detail.value.photo_self_path,
+            name: 'file',
+            header: {
+              "Content-Type": "multipart/form-data",
+              'accept': 'application/json',
+              'Authorization': 'Bearer ..'    //若有token，此处换上你的token，没有的话省略
+            },
+            formData: {
+              'openid': e.detail.value.openid,
+              'type': 'photo_self',
+            },
+            success: function (res) {
+              var data = res.data;
+              console.log('data');
+            },
+            fail: function (res) {
+              console.log('fail');
+
+            },
+          }),
+
+          wx.uploadFile(
+            {
+              url: 'http://localhost:8001/regist/photoupload',
+              filePath: e.detail.value.photo_others_path,
+              name: 'file',
+              header: {
+                "Content-Type": "multipart/form-data",
+                'accept': 'application/json',
+                'Authorization': 'Bearer ..'    //若有token，此处换上你的token，没有的话省略
+              },
+              formData: {
+                'openid': e.detail.value.openid,
+                'type': 'photo_others',
+              },
+              success: function (res) {
+                var data = res.data;
+                console.log('data');
+              },
+              fail: function (res) {
+                console.log('fail');
+
+              },
+            })
+
+
       }
     })
 
-    wx.uploadFile(
-      {
-      url: 'http://localhost:8001/regist/photoupload', 
-      filePath: e.detail.value.photo_self_path,
-      name: 'file',
-      header: {
-        "Content-Type": "multipart/form-data",
-        'accept': 'application/json',
-        'Authorization': 'Bearer ..'    //若有token，此处换上你的token，没有的话省略
-      },
-      formData: {
-        'openid': e.detail.value.openid,
-        'type': 'photo_self',
-      },
-      success: function (res) {
-        var data = res.data;
-        console.log('data');
-      },
-      fail: function (res) {
-        console.log('fail');
+   
 
-      },
-    })
-
-    wx.uploadFile(
-      {
-        url: 'http://localhost:8001/regist/photoupload',
-        filePath: e.detail.value.photo_others_path,
-        name: 'file',
-        header: {
-          "Content-Type": "multipart/form-data",
-          'accept': 'application/json',
-          'Authorization': 'Bearer ..'    //若有token，此处换上你的token，没有的话省略
-        },
-        formData: {
-          'openid': e.detail.value.openid,
-          'type': 'photo_others',
-        },
-        success: function (res) {
-          var data = res.data;
-          console.log('data');
-        },
-        fail: function (res) {
-          console.log('fail');
-
-        },
-      })
-
+   
   },
   //表单重置按钮
   formReset: function (e) {
