@@ -2,36 +2,37 @@ Page({
   data: {
     openid: '1',
   },
+  onLoad: function(options){
+    
+  },
 
-  onLoad: function (options) {
+ 
+  onReady: function (options) {
     var that = this;
     wx.getStorage({
       key: 'openid',
       success: function (res) {
+        console.log(res.data)
         that.setData({
           openid: res.data,
         })
+        wx.connectSocket({
+          url: "ws://localhost:8001/websocket" + "?openid=" + that.data.openid,
+          header: {
+            'content-type': 'application/json'
+          },
+          method: "GET",
+          success() {
+            console.log('success');
+          },
+          fail() {
+            console.log('fail')
+          }
+        })
       },
     })
-
     //建立连接
-    wx.connectSocket({
-      url: "ws://localhost:8001/websocket" + "?openid=" + this.data.openid,
-      data:{
-        openid:this.data.openid,
-        open:'1'
-      },
-      header: {
-        'content-type': 'application/json'
-      },
-      method: "GET",
-      success() {
-        console.log('success');
-      },
-      fail() {
-        console.log('fail')
-      }
-    })
+
 
     //连接成功
     wx.onSocketOpen(function () {
