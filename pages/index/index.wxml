@@ -18,6 +18,7 @@
 </form>
 
        <text bindtap="toRegist" class="user-motto">注册</text> 
+       <text bindtap="toChat" class="user-motto">聊天</text> 
     </block>
   </view>
   <view class="usermotto">

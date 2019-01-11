@@ -34,6 +34,12 @@ Page({
     })
   },
 
+  toChat: function () {
+    wx.navigateTo({
+      url: '../chat/chat'
+    })
+  },
+
   onLoad: function () {
     var that = this;
       wx.getStorage({

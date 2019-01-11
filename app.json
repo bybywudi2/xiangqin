@@ -2,7 +2,8 @@
   "pages": [
     "pages/index/index",
     "pages/logs/logs",
-    "pages/regist/regist"
+    "pages/regist/regist",
+    "pages/chat/chat"
   ],
   "window": {
     "backgroundTextStyle": "light",
