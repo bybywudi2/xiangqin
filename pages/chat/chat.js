@@ -2,11 +2,11 @@ Page({
   data: {
     openid: '1',
   },
-  onLoad: function(options){
-    
+
+  onUnload:  function(options){
+    wx.closeSocket()
   },
 
- 
   onReady: function (options) {
     var that = this;
     wx.getStorage({
@@ -31,25 +31,29 @@ Page({
         })
       },
     })
-    //建立连接
-
 
     //连接成功
     wx.onSocketOpen(function () {
-      wx.sendSocketMessage({
-        data: 'stock',
-      })
+
     })
 
     //接收数据
     wx.onSocketMessage(function (data) {
-      //var objData = JSON.parse(data.data);
+      var objData = JSON.parse(data.data);
       console.log(data);
+      console.log(objData);
     })
 
     //连接失败
     wx.onSocketError(function () {
       console.log('websocket连接失败！');
     })
+  },
+
+  formSubmit: function (e) {
+    wx.sendSocketMessage({
+      data: e.detail.value.content,
+    })
+    console.log(e.detail.formId);
   },
 })
