@@ -1,8 +1,8 @@
 <!--pages/regist/regist.wxml-->
 
-<!--这里用form，name=“nameName1”可以作为form的属性进行 
-（e.detail.value.nameName1）调用,
-form自带有提交和重置按钮，会自动获取表单中所有控件值的改变-->
+<view class="btn-area">
+      <button form-type="submit">{{objData}}</button>
+</view>
 <form class="page__bd" bindsubmit="formSubmit" bindreset="formSubmit" report-submit='true'>
     <view class="section">
       <view class="section__title">内容</view>
