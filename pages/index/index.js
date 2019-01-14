@@ -41,9 +41,6 @@ Page({
   },
 
   onLoad: function () {
-    wx.navigateTo({
-      url: '../chat/chat'
-    })
     var that = this;
     wx.getStorage({
       key: 'openid',

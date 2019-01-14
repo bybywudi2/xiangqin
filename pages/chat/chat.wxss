@@ -1,17 +1,18 @@
 /**chat.wxss**/
 @import "../../components/bubble/bubble.wxss";
-
-.chat-content {
+.chat-container{
   height: 100%;
+}
+.chat-content {
+  height: 1302rpx;
   width: 100%;
-  display:flex;
+  flex: 1;
   overflow: scroll;
-  padding-bottom:85rpx;
 }
 .chat-input {
-  position:fixed;
-  bottom:0;
   width: 100%;
+  display: fixed;
+  bottom: 0rpx;
 }
 .chat-input-wrapper {
   width: 100%;
@@ -39,12 +40,4 @@
 }
 .chat-input-other {
   width: 140rpx;
-}
-.chat-input-other > image {
-  margin-top: 14rpx;
-  width: 50rpx;
-  height: 50rpx;
-}
-.chat-input-other > image:first-child {
-  margin-right: 20rpx;
 }

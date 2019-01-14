@@ -1,87 +1,37 @@
+const msgs = require('./chat-mock-data.js');
 Page({
   data: {
+    lists: [
+
+    ],
     openid: '1',
-    messages: [{
-        id: "msg1",
-        message: '去结婚吧',
-        messageType: 1,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg2",
-        message: '走！',
-        messageType: 0,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg3",
-        message: '真的么？？？我有点不敢相信自己的眼睛',
-        messageType: 1,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg4",
-        message: '哈哈哈，当然是假的，我一定是在做梦',
-        messageType: 0,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg5",
-        message: '是的，孩子，醒醒吧，有多少分量自己还不清楚呢',
-        messageType: 1,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg6",
-        message: ':)',
-        messageType: 0,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg7",
-        message: '滚滚滚，别来烦老娘',
-        messageType: 1,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg8",
-        message: '女神的威怒',
-        messageType: 0,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg9",
-        message: '屌丝也配有女神',
-        messageType: 1,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg10",
-        message: '你这么说就有点不对了。。。',
-        messageType: 0,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg11",
-        message: '实话实说，等你变成高富帅再说吧',
-        messageType: 1,
-        url: '../../images/photoupload.jpg'
-      },
-      {
-        id: "msg12",
-        message: '高是不可能了，变富吧，哈哈哈哈',
-        messageType: 0,
-        url: '../../images/photoupload.jpg'
-      }
-    ], // 聊天记录
+    messages: [], // 聊天记录
     msg: '', // 当前输入
     scrollTop: 0, // 页面的滚动值
     socketOpen: false, // websocket是否打开
-    tolastId: '', // 最后一条消息的ID
+    toIndex: '', // 最后一条消息的ID
     isFirstSend: true // 是否第一次发送消息(区分历史和新加)
   },
 
+
   onUnload: function (options) {
+    /*var that = this;
+    var finallist;
+
+    var res = wx.getStorageSync('chatList' + that.match_user_openid);
+    if(res != undefined){
+      var reslist = JSON.parse(res);
+    }else{
+      var reslist = [];
+    }
+    console.log('storage=' + res);
+    finallist = reslist.concat(that.data.lists);
+    console.log(finallist);
+    finallist = JSON.stringify(finallist);*/
+    if (this.data.lists != []) {
+      var finallist = JSON.stringify(this.data.lists);
+      wx.setStorageSync('chatList' + this.match_user_openid, finallist);
+    }
     wx.closeSocket()
   },
 
@@ -90,30 +40,117 @@ Page({
   },
 
   onReady: function (options) {
+
     var that = this;
-    //    wx.getStorage({
-    //      key: 'openid',
-    //      success: function (res) {
-    //        console.log(res.data)
-    //        that.setData({
-    //          openid: res.data,
-    //        })
-    //        wx.connectSocket({
-    //          url: "ws://localhost:8001/websocket" + "?openid=" + that.data.openid,
-    //          header: {
-    //            'content-type': 'application/json'
-    //          },
-    //          method: "GET",
-    //          success() {
-    //            console.log('success');
-    //          },
-    //          fail() {
-    //            console.log('fail')
-    //          }
-    //        })
-    //      },
-    //    })
-    //
+    var openid = wx.getStorageSync('openid');
+    var finallist = [];
+    that.setData({
+      openid: openid,
+      messages: msgs
+    })
+    this.delayPageScroll();
+    wx.request({
+      url: 'http://localhost:8001/chat/getMatchingUser',
+      data: {
+        openid: that.data.openid, //获取openid的话 需要向后台传递code,利用code请求api获取openid
+      },
+      success: function (res) {
+        that.setData({
+          match_user_openid: res.data.target_openid
+        })
+        var locallist = wx.getStorageSync('chatList' + that.match_user_openid);
+        console.log(locallist);
+        //locallist = [];
+        if (locallist == null || locallist == '') {
+          locallist = [];
+        } else {
+          locallist = JSON.parse(locallist);
+        }
+        wx.request({
+          url: 'http://localhost:8001/chat/receiveMessage?openid=' + that.data.openid,
+          success: function (res) {
+            wx.request({
+              url: 'http://localhost:8001/chat/receiveMessageSuccess?openid=' + that.data.openid,
+            })
+            console.log('redis data=');
+            console.log(res.data);
+            if (res.data.messages != undefined) {
+              finallist = locallist.concat(res.data.messages);
+            } else {
+              finallist = locallist;
+            }
+
+            that.setData({
+              lists: finallist
+            })
+            wx.connectSocket({
+              url: "ws://localhost:8001/websocket" + "?openid=" + that.data.openid,
+              header: {
+                'content-type': 'application/json'
+              },
+              method: "GET",
+              success() {
+                console.log('success');
+              },
+              fail() {
+                console.log('fail')
+              }
+            })
+            console.log('lists=');
+            console.log(that.data.lists);
+          }
+        })
+      },
+      fail: function () {
+        wx.showModal({
+          title: '服务器错误',
+          content: '抱歉！请稍候重试',
+          success: function (res) {
+            if (res.confirm) { //这里是点击了确定以后
+              console.log('用户点击确定')
+            } else { //这里是点击了取消以后
+              console.log('用户点击取消')
+            }
+          }
+        })
+      }
+    })
+
+    /*wx.getStorage({
+      key: 'openid',
+      success: function (res) {
+        that.setData({
+          openid: res.data,
+        })
+        wx.request({
+          url: 'http://localhost:8001/chat/getMatchingUser',
+          data: {
+            openid: that.data.openid,//获取openid的话 需要向后台传递code,利用code请求api获取openid
+          },
+          success: function (res) {
+            that.setData({
+              match_user_openid: res.data.target_openid
+            })
+          },
+          fail: function(){
+            wx.showModal({
+              title: '服务器错误',
+              content: '抱歉！请稍候重试',
+              success: function (res) {
+                if (res.confirm) {//这里是点击了确定以后
+                  console.log('用户点击确定')
+                } else {//这里是点击了取消以后
+                  console.log('用户点击取消')
+                }
+              }
+            })
+          }
+        })
+
+
+      },
+    })*/
+
     //连接成功
     wx.onSocketOpen(function () {
 
@@ -122,8 +159,7 @@ Page({
     //接收数据
     wx.onSocketMessage(function (data) {
       var objData = JSON.parse(data.data);
-      console.log(data);
-      console.log(objData);
+      that.data.lists.push(objData);
     })
 
     //连接失败
@@ -137,7 +173,15 @@ Page({
     wx.sendSocketMessage({
       data: e.detail.value.content,
     })
-    console.log(e.detail.formId);
+    var timestamp = (new Date()).valueOf();
+    var message = {
+      content: e.detail.value.content,
+      senderName: "我",
+      time: timestamp,
+      sender: this.data.openid,
+      reciever: this.data.match_user_openid,
+    }
+    this.data.lists.push(message);
   },
   setNickName(option) {
     const nickname = option.nickname || '匿名聊天';
@@ -151,7 +195,7 @@ Page({
     let length = messages.length;
     let lastId = messages[length - 1].id;
     this.setData({
-      tolastId: lastId
+      toIndex: lastId
     });
 
   },
@@ -171,6 +215,6 @@ Page({
   },
   sendMessage() {
     this.delayPageScroll();
-    console.log(this.data.tolastId)
+    console.log(this.data.toIndex)
   }
 })
