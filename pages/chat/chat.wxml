@@ -1,14 +1,33 @@
-<!--pages/regist/regist.wxml-->
-
-<!--这里用form，name=“nameName1”可以作为form的属性进行 
-（e.detail.value.nameName1）调用,
-form自带有提交和重置按钮，会自动获取表单中所有控件值的改变-->
-<form class="page__bd" bindsubmit="formSubmit" bindreset="formSubmit" report-submit='true'>
-    <view class="section">
-      <view class="section__title">内容</view>
-      <input name="content" style="background-color: #FFFFFF" placeholder="" />
-    </view>
-    <view class="btn-area">
-      <button form-type="submit">发送</button>
-    </view>
-  </form>
+<!--chat.wxml-->
+<import src="../../components/bubble/bubble.wxml" />
+<view id="chat-container">
+  <scroll-view 
+    scroll-y
+    scroll-with-animation 
+    class="chat-content"  
+    scroll-into-view="{{tolastId}}">
+    <block wx:for="{{ messages }}" wx:key="messages{{ index }}" >
+      <template id="msg{{ index }}" is="bubble" data="{{ ...item }}"/>
+    </block>
+  </scroll-view>
+  <form class="chat-input" id="hei">
+    <view class="chat-input-wrapper">
+      <view class="chat-input-record"></view>
+      <view class="chat-input-main">
+        <input 
+          value="{{ msg }}"
+          cursor-spacing="16" 
+          adjust-position="{{ true }}" 
+          cursor="16" 
+          confirm-type="send"
+          confirm-hold="{{ true }}"
+          bindinput="onInput"
+          bindconfirm="sendMessage"
+          bindfocus="onFocus" />
+      </view>
+      <view class="chat-input-other">
+         <van-button slot="button" size="small" type="primary" bindclick="sendMessage">发送</van-button>
+      </view>
+    </view>
+  </form>
+</view>
