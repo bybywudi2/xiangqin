@@ -1,7 +1,7 @@
 /**chat.wxss**/
 @import "../../components/bubble/bubble.wxss";
 .chat-container{
-  height: 100%;
+  
 }
 .chat-content {
   height: 1302rpx;
