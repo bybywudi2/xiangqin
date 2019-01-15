@@ -1,4 +1,5 @@
 const msgs = require('./chat-mock-data.js');
+const appUrl = require('../../utils/url.js')
 Page({
   data: {
     lists: [],
@@ -48,7 +49,7 @@ Page({
     })
     this.delayPageScroll();
     wx.request({
-      url: 'http://39.106.194.129:8080/chat/getMatchingUser',
+      url: `http://${appUrl[appUrl.env]}/chat/getMatchingUser`,
       data: {
         openid: that.data.openid, //获取openid的话 需要向后台传递code,利用code请求api获取openid
       },
@@ -64,10 +65,10 @@ Page({
           locallist = JSON.parse(locallist);
         }
         wx.request({
-          url: 'http://39.106.194.129:8080/chat/receiveMessage?openid=' + that.data.openid,
+          url: 'http://${appUrl[appUrl.env]}/chat/receiveMessage?openid=' + that.data.openid,
           success: function (res) {
             wx.request({
-              url: 'http://39.106.194.129:8080/chat/receiveMessageSuccess?openid=' + that.data.openid,
+              url: 'http://${appUrl[appUrl.env]}/chat/receiveMessageSuccess?openid=' + that.data.openid,
             })
             console.log('redis data=');
             console.log(res.data);
@@ -81,7 +82,7 @@ Page({
               messages: finallist
             })
             wx.connectSocket({
-              url: "ws://localhost:8001/websocket" + "?openid=" + that.data.openid,
+              url: "ws://${appUrl[appUrl.env]}/websocket" + "?openid=" + that.data.openid,
               header: {
                 'content-type': 'application/json'
               },

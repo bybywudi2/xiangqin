@@ -1,6 +1,7 @@
 //index.js
 //获取应用实例
-import Notify from '../../components/van/dist/notify/notify';
+const appUrl = require('../../utils/url.js')
+
 const app = getApp()
 
 Page({
@@ -16,7 +17,7 @@ Page({
     secret: 'a41a51a058f6a7ca83dbe0450e6b2147',
     //local_getopenid_url:'http://localhost:8001/login/getOpenId',
     //test_getopenid_url:'http://39.106.194.129:8080/yulinlianaibar/login/getOpenId'
-    getopenid_url: 'http://localhost:8001/login/getOpenId',
+    getopenid_url: `http://${appUrl[appUrl.env]}/login/getOpenId`,
     openid: '1',
   },
 
@@ -94,7 +95,7 @@ Page({
               success: function (res_user) {
                 wx.request({
                   //url: getopenid_url,
-                  url: 'http://localhost:8001/login/getOpenId',
+                  url: `http://${appUrl[appUrl.env]}/login/getOpenId`,
                   data: {
                     code: res.code, //获取openid的话 需要向后台传递code,利用code请求api获取openid
                     headurl: res_user.userInfo.avatarUrl, //这些是用户的基本信息
@@ -133,7 +134,7 @@ Page({
             wx.getUserInfo({
               success: function (res_user) {
                 wx.request({
-                  url: 'http://localhost:8001/login/getOpenId',
+                  url: `http://${appUrl[appUrl.env]}/login/getOpenId`,
                   //url: app.globalData.getopenid_url,
                   data: {
                     code: res.code, //获取openid的话 需要向后台传递code,利用code请求api获取openid
