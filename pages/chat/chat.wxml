@@ -22,11 +22,10 @@
           adjust-position="{{ true }}" 
           cursor="16" 
           bindinput="onInput"
-          bindconfirm="sendMessage"
-          bindfocus="onFocus" />
+         />
       </view>
       <view class="chat-input-other">
-         <van-button slot="button" size="small" type="primary" bindclick="sendMessage">发送</van-button>
+         <van-button  wx:if="{{msgLen!==0}}" slot="button" size="small" type="primary" bindclick="sendMessage">发送</van-button>
       </view>
     </view>
   </form>

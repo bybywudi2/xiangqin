@@ -3,6 +3,7 @@ const appUrl = require("../../utils/url.js");
 Page({
   data: {
     lists: [],
+    msgLen: 0,
     openid: "1",
     match_user_openid: "1",
     messages: [], // 聊天记录
@@ -13,7 +14,7 @@ Page({
     isFirstSend: true // 是否第一次发送消息(区分历史和新加)
   },
 
-  onUnload: function(options) {
+  onUnload: function (options) {
     /*var that = this;
     var finallist;
 
@@ -38,7 +39,7 @@ Page({
     // 设置标题
   },
 
-  onReady: function(options) {
+  onReady: function (options) {
     var that = this;
     var openid = wx.getStorageSync("openid");
     var finallist = [];
@@ -51,7 +52,7 @@ Page({
       data: {
         openid: that.data.openid //获取openid的话 需要向后台传递code,利用code请求api获取openid
       },
-      success: function(res) {
+      success: function (res) {
         that.setData({
           match_user_openid: res.data.target_openid
         });
@@ -63,13 +64,11 @@ Page({
           locallist = JSON.parse(locallist);
         }
         wx.request({
-          url:
-            `http://39.106.194.129/yulinlianaibar/chat/receiveMessage?openid=` +
+          url: `http://39.106.194.129/yulinlianaibar/chat/receiveMessage?openid=` +
             that.data.openid,
-          success: function(res) {
+          success: function (res) {
             wx.request({
-              url:
-                `http://39.106.194.129/yulinlianaibar/chat/receiveMessageSuccess?openid=` +
+              url: `http://39.106.194.129/yulinlianaibar/chat/receiveMessageSuccess?openid=` +
                 that.data.openid
             });
             console.log("redis data=");
@@ -84,8 +83,7 @@ Page({
               messages: finallist
             });
             wx.connectSocket({
-              url:
-                `ws://39.106.194.129/yulinlianaibar/websocket` +
+              url: `ws://39.106.194.129/yulinlianaibar/websocket` +
                 "?openid=" +
                 that.data.openid,
               header: {
@@ -103,11 +101,11 @@ Page({
           }
         });
       },
-      fail: function() {
+      fail: function () {
         wx.showModal({
           title: "服务器错误",
           content: "抱歉！请稍候重试",
-          success: function(res) {
+          success: function (res) {
             if (res.confirm) {
               //这里是点击了确定以后
               console.log("用户点击确定");
@@ -156,10 +154,10 @@ Page({
     })*/
 
     //连接成功
-    wx.onSocketOpen(function() {});
+    wx.onSocketOpen(function () {});
 
     //接收数据
-    wx.onSocketMessage(function(data) {
+    wx.onSocketMessage(function (data) {
       that.delayPageScroll();
       var objData = JSON.parse(data.data);
       that.data.messages.push(objData);
@@ -169,12 +167,12 @@ Page({
     });
 
     //连接失败
-    wx.onSocketError(function() {
+    wx.onSocketError(function () {
       console.log("websocket连接失败！");
     });
   },
 
-  formSubmit: function(e) {
+  formSubmit: function (e) {
     wx.sendSocketMessage({
       data: e.detail.value.content
     });
@@ -199,7 +197,8 @@ Page({
     if (this.data.messages.length > 0) {
       let messages = this.data.messages;
       let length = messages.length;
-      let lastId = messages[length - 1].sender;
+      let lastId = `msg${length - 1}`;
+      console.log(lastId)
       this.setData({
         toIndex: lastId
       });
@@ -207,15 +206,18 @@ Page({
   },
   // 输入
   onInput(event) {
-    const value = event.detail.value;
+    let value = event.detail.value;
+    let _value = value.trim()
+    let msglen = _value.length
+
     this.setData({
-      msg: value
+      msg: value,
+      msgLen: msglen
     });
   },
   // 聚焦
   onFocus() {},
   sendMessage() {
-    this.delayPageScroll();
     wx.sendSocketMessage({
       data: this.data.msg
     });
@@ -231,7 +233,9 @@ Page({
     this.data.messages.push(message);
     this.setData({
       msg: "",
+      msgLen: 0,
       messages: this.data.messages
     });
+    this.delayPageScroll();
   }
 });
