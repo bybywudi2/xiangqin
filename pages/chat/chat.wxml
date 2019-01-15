@@ -8,7 +8,7 @@
     scroll-top="{{ scrollTop }}"
     scroll-into-view="{{toIndex}}">
     <block wx:for="{{ messages }}" wx:key="messages{{ index }}"  id="msg{{ index }}">
-      <bubble id="msg{{ index }}" message="{{item}}" localOpenId="oDPNN5T7tJuLHhUR9iGphGUuC504" />
+      <bubble id="msg{{ index }}" message="{{item}}" localOpenId="{{openid}}" />
     </block>
   </scroll-view>
   <view class="chat-input" >
@@ -21,8 +21,6 @@
           cursor-spacing="16" 
           adjust-position="{{ true }}" 
           cursor="16" 
-          confirm-type="send"
-          confirm-hold="{{ true }}"
           bindinput="onInput"
           bindconfirm="sendMessage"
           bindfocus="onFocus" />
