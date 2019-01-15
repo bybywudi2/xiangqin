@@ -2,9 +2,9 @@ const msgs = require('./chat-mock-data.js');
 Page({
   data: {
     lists: [
-
     ],
     openid: '1',
+    match_user_openid: '1',
     messages: [], // 聊天记录
     msg: '', // 当前输入
     scrollTop: 0, // 页面的滚动值
@@ -25,11 +25,11 @@ Page({
       var reslist = [];
     }
     console.log('storage=' + res);
-    finallist = reslist.concat(that.data.lists);
+    finallist = reslist.concat(that.data.messages);
     console.log(finallist);
     finallist = JSON.stringify(finallist);*/
-    if (this.data.lists != []) {
-      var finallist = JSON.stringify(this.data.lists);
+    if (this.data.messages != []) {
+      var finallist = JSON.stringify(this.data.messages);
       wx.setStorageSync('chatList' + this.match_user_openid, finallist);
     }
     wx.closeSocket()
@@ -81,7 +81,7 @@ Page({
             }
 
             that.setData({
-              lists: finallist
+              messages: finallist
             })
             wx.connectSocket({
               url: "ws://localhost:8001/websocket" + "?openid=" + that.data.openid,
@@ -96,8 +96,8 @@ Page({
                 console.log('fail')
               }
             })
-            console.log('lists=');
-            console.log(that.data.lists);
+            console.log('messages=');
+            console.log(that.data.messages);
           }
         })
       },
@@ -159,7 +159,7 @@ Page({
     //接收数据
     wx.onSocketMessage(function (data) {
       var objData = JSON.parse(data.data);
-      that.data.lists.push(objData);
+      that.data.messages.push(objData);
     })
 
     //连接失败
@@ -181,7 +181,7 @@ Page({
       sender: this.data.openid,
       reciever: this.data.match_user_openid,
     }
-    this.data.lists.push(message);
+    this.data.messages.push(message);
   },
   setNickName(option) {
     const nickname = option.nickname || '匿名聊天';
@@ -193,7 +193,7 @@ Page({
   delayPageScroll() {
     let messages = this.data.messages;
     let length = messages.length;
-    let lastId = messages[length - 1].id;
+    let lastId = messages[length - 1].sender;
     this.setData({
       toIndex: lastId
     });
@@ -216,5 +216,17 @@ Page({
   sendMessage() {
     this.delayPageScroll();
     console.log(this.data.toIndex)
+    wx.sendSocketMessage({
+      data: this.data.msg,
+    })
+    var timestamp = (new Date()).valueOf();
+    var message = {
+      content: this.data.msg,
+      senderName: "我",
+      time: timestamp,
+      sender: this.data.openid,
+      reciever: this.data.match_user_openid,
+    }
+    this.data.messages.push(message);
   }
 })
