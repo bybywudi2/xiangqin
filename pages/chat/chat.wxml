@@ -1,14 +1,36 @@
-<!--pages/regist/regist.wxml-->
-
-<view class="btn-area">
-      <button form-type="submit">{{objData}}</button>
+<!--chat.wxml-->
+<import src="../../components/bubble/bubble.wxml" />
+<view id="chat-container">
+  <scroll-view 
+    scroll-y
+    scroll-with-animation 
+    class="chat-content"  
+    scroll-top="{{ scrollTop }}"
+    scroll-into-view="{{toIndex}}">
+    <block wx:for="{{ messages }}" wx:key="messages{{ index }}" >
+      <template id="msg{{ index }}" is="bubble" data="{{ ...item }}"/>
+    </block>
+  </scroll-view>
+  <view class="chat-input" >
+  <form class="chat-input-form" id="hei">
+    <view class="chat-input-wrapper">
+      <view class="chat-input-record"></view>
+      <view class="chat-input-main">
+        <input 
+          value="{{ msg }}"
+          cursor-spacing="16" 
+          adjust-position="{{ true }}" 
+          cursor="16" 
+          confirm-type="send"
+          confirm-hold="{{ true }}"
+          bindinput="onInput"
+          bindconfirm="sendMessage"
+          bindfocus="onFocus" />
+      </view>
+      <view class="chat-input-other">
+         <van-button slot="button" size="small" type="primary" bindclick="sendMessage">发送</van-button>
+      </view>
+    </view>
+  </form>
+  </view>
 </view>
-<form class="page__bd" bindsubmit="formSubmit" bindreset="formSubmit" report-submit='true'>
-    <view class="section">
-      <view class="section__title">内容</view>
-      <input name="content" style="background-color: #FFFFFF" placeholder="" />
-    </view>
-    <view class="btn-area">
-      <button form-type="submit">发送</button>
-    </view>
-  </form>
