@@ -1,20 +1,19 @@
-const msgs = require('./chat-mock-data.js');
-const appUrl = require('../../utils/url.js')
+const msgs = require("./chat-mock-data.js");
+const appUrl = require("../../utils/url.js");
 Page({
   data: {
     lists: [],
-    openid: '1',
-    match_user_openid: '1',
+    openid: "1",
+    match_user_openid: "1",
     messages: [], // 聊天记录
-    msg: '', // 当前输入
+    msg: "", // 当前输入
     scrollTop: 0, // 页面的滚动值
     socketOpen: false, // websocket是否打开
-    toIndex: '', // 最后一条消息的ID
+    toIndex: "", // 最后一条消息的ID
     isFirstSend: true // 是否第一次发送消息(区分历史和新加)
   },
 
-
-  onUnload: function (options) {
+  onUnload: function(options) {
     /*var that = this;
     var finallist;
 
@@ -30,47 +29,50 @@ Page({
     finallist = JSON.stringify(finallist);*/
     if (this.data.messages != []) {
       var finallist = JSON.stringify(this.data.messages);
-      wx.setStorageSync('chatList' + this.match_user_openid, finallist);
+      wx.setStorageSync("chatList" + this.match_user_openid, finallist);
     }
-    wx.closeSocket()
+    wx.closeSocket();
   },
 
   onLoad(option) {
     // 设置标题
   },
 
-  onReady: function (options) {
+  onReady: function(options) {
     var that = this;
-    var openid = wx.getStorageSync('openid');
+    var openid = wx.getStorageSync("openid");
     var finallist = [];
     that.setData({
-      openid: openid,
-      messages: msgs
-    })
+      openid: openid
+    });
     this.delayPageScroll();
     wx.request({
-      url: `https://${appUrl[appUrl.env]}/chat/getMatchingUser`,
+      url: `http://39.106.194.129/yulinlianaibar/chat/getMatchingUser`,
       data: {
-        openid: that.data.openid, //获取openid的话 需要向后台传递code,利用code请求api获取openid
+        openid: that.data.openid //获取openid的话 需要向后台传递code,利用code请求api获取openid
       },
-      success: function (res) {
+      success: function(res) {
         that.setData({
           match_user_openid: res.data.target_openid
-        })
-        var locallist = wx.getStorageSync('chatList' + that.match_user_openid);
+        });
+        var locallist = wx.getStorageSync("chatList" + that.match_user_openid);
         //locallist = [];
-        if (locallist == null || locallist == '') {
+        if (locallist == null || locallist == "") {
           locallist = [];
         } else {
           locallist = JSON.parse(locallist);
         }
         wx.request({
-          url: 'https://${appUrl[appUrl.env]}/chat/receiveMessage?openid=' + that.data.openid,
-          success: function (res) {
+          url:
+            `http://39.106.194.129/yulinlianaibar/chat/receiveMessage?openid=` +
+            that.data.openid,
+          success: function(res) {
             wx.request({
-              url: 'https://${appUrl[appUrl.env]}/chat/receiveMessageSuccess?openid=' + that.data.openid,
-            })
-            console.log('redis data=');
+              url:
+                `http://39.106.194.129/yulinlianaibar/chat/receiveMessageSuccess?openid=` +
+                that.data.openid
+            });
+            console.log("redis data=");
             console.log(res.data);
             if (res.data.messages != undefined) {
               finallist = locallist.concat(res.data.messages);
@@ -80,38 +82,43 @@ Page({
 
             that.setData({
               messages: finallist
-            })
+            });
             wx.connectSocket({
-              url: `ws://${appUrl[appUrl.env]}/websocket` + "?openid=" + that.data.openid,
+              url:
+                `ws://39.106.194.129/yulinlianaibar/websocket` +
+                "?openid=" +
+                that.data.openid,
               header: {
-                'content-type': 'application/json'
+                "content-type": "application/json"
               },
               method: "GET",
               success() {
-                console.log('success');
+                console.log("success");
               },
               fail() {
-                console.log('fail')
+                console.log("fail");
               }
-            })
+            });
             console.log(that.data.messages);
           }
-        })
+        });
       },
-      fail: function () {
+      fail: function() {
         wx.showModal({
-          title: '服务器错误',
-          content: '抱歉！请稍候重试',
-          success: function (res) {
-            if (res.confirm) { //这里是点击了确定以后
-              console.log('用户点击确定')
-            } else { //这里是点击了取消以后
-              console.log('用户点击取消')
+          title: "服务器错误",
+          content: "抱歉！请稍候重试",
+          success: function(res) {
+            if (res.confirm) {
+              //这里是点击了确定以后
+              console.log("用户点击确定");
+            } else {
+              //这里是点击了取消以后
+              console.log("用户点击取消");
             }
           }
-        })
+        });
       }
-    })
+    });
 
     /*wx.getStorage({
       key: 'openid',
@@ -149,52 +156,54 @@ Page({
     })*/
 
     //连接成功
-    wx.onSocketOpen(function () {
-
-    })
+    wx.onSocketOpen(function() {});
 
     //接收数据
-    wx.onSocketMessage(function (data) {
+    wx.onSocketMessage(function(data) {
+      that.delayPageScroll();
       var objData = JSON.parse(data.data);
       that.data.messages.push(objData);
-    })
+      that.setData({
+        messages: that.data.messages
+      });
+    });
 
     //连接失败
-    wx.onSocketError(function () {
-      console.log('websocket连接失败！');
-    })
-
+    wx.onSocketError(function() {
+      console.log("websocket连接失败！");
+    });
   },
 
-  formSubmit: function (e) {
+  formSubmit: function(e) {
     wx.sendSocketMessage({
-      data: e.detail.value.content,
-    })
-    var timestamp = (new Date()).valueOf();
+      data: e.detail.value.content
+    });
+    var timestamp = new Date().valueOf();
     var message = {
       content: e.detail.value.content,
       senderName: "我",
       time: timestamp,
       sender: this.data.openid,
-      reciever: this.data.match_user_openid,
-    }
+      reciever: this.data.match_user_openid
+    };
     this.data.messages.push(message);
   },
   setNickName(option) {
-    const nickname = option.nickname || '匿名聊天';
+    const nickname = option.nickname || "匿名聊天";
     wx.setNavigationBarTitle({
       title: nickname
     });
   },
   // 延迟页面向顶部滑动
   delayPageScroll() {
-    let messages = this.data.messages;
-    let length = messages.length;
-    let lastId = messages[length - 1].sender;
-    this.setData({
-      toIndex: lastId
-    });
-
+    if (this.data.messages.length > 0) {
+      let messages = this.data.messages;
+      let length = messages.length;
+      let lastId = messages[length - 1].sender;
+      this.setData({
+        toIndex: lastId
+      });
+    }
   },
   // 输入
   onInput(event) {
@@ -204,25 +213,25 @@ Page({
     });
   },
   // 聚焦
-  onFocus() {
-    this.setData({
-      scrollTop: 9999999
-    });
-  },
+  onFocus() {},
   sendMessage() {
     this.delayPageScroll();
-    console.log(this.data.toIndex)
     wx.sendSocketMessage({
-      data: this.data.msg,
-    })
-    var timestamp = (new Date()).valueOf();
+      data: this.data.msg
+    });
+    var timestamp = new Date().valueOf();
     var message = {
       content: this.data.msg,
       senderName: "我",
       time: timestamp,
       sender: this.data.openid,
-      reciever: this.data.match_user_openid,
-    }
+      reciever: this.data.match_user_openid
+    };
+    console.log(message);
     this.data.messages.push(message);
+    this.setData({
+      msg: "",
+      messages: this.data.messages
+    });
   }
-})
+});
