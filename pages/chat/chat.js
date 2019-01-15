@@ -1,8 +1,7 @@
 const msgs = require('./chat-mock-data.js');
 Page({
   data: {
-    lists: [
-    ],
+    lists: [],
     openid: '1',
     match_user_openid: '1',
     messages: [], // 聊天记录
@@ -40,7 +39,6 @@ Page({
   },
 
   onReady: function (options) {
-
     var that = this;
     var openid = wx.getStorageSync('openid');
     var finallist = [];
@@ -50,7 +48,7 @@ Page({
     })
     this.delayPageScroll();
     wx.request({
-      url: 'http://localhost:8001/chat/getMatchingUser',
+      url: 'http://39.106.194.129:8080/chat/getMatchingUser',
       data: {
         openid: that.data.openid, //获取openid的话 需要向后台传递code,利用code请求api获取openid
       },
@@ -59,7 +57,6 @@ Page({
           match_user_openid: res.data.target_openid
         })
         var locallist = wx.getStorageSync('chatList' + that.match_user_openid);
-        console.log(locallist);
         //locallist = [];
         if (locallist == null || locallist == '') {
           locallist = [];
@@ -67,10 +64,10 @@ Page({
           locallist = JSON.parse(locallist);
         }
         wx.request({
-          url: 'http://localhost:8001/chat/receiveMessage?openid=' + that.data.openid,
+          url: 'http://39.106.194.129:8080/chat/receiveMessage?openid=' + that.data.openid,
           success: function (res) {
             wx.request({
-              url: 'http://localhost:8001/chat/receiveMessageSuccess?openid=' + that.data.openid,
+              url: 'http://39.106.194.129:8080/chat/receiveMessageSuccess?openid=' + that.data.openid,
             })
             console.log('redis data=');
             console.log(res.data);
@@ -96,7 +93,6 @@ Page({
                 console.log('fail')
               }
             })
-            console.log('messages=');
             console.log(that.data.messages);
           }
         })
@@ -208,7 +204,6 @@ Page({
   },
   // 聚焦
   onFocus() {
-
     this.setData({
       scrollTop: 9999999
     });
