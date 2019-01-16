@@ -12,7 +12,7 @@
     </block>
   </scroll-view>
   <view class="chat-input" >
-  <form class="chat-input-form" id="hei">
+  <form class="chat-input-form" id="hei" bindsubmit="sendMessage" report-submit='true'>
     <view class="chat-input-wrapper">
       <view class="chat-input-record"></view>
       <view class="chat-input-main">
@@ -25,7 +25,8 @@
          />
       </view>
       <view class="chat-input-other">
-         <van-button  wx:if="{{msgLen!==0}}" slot="button" size="small" type="primary" bindclick="sendMessage">发送</van-button>
+        <button wx:if="{{msgLen!==0}}"   slot="button" size="small" type="primary" form-type="submit">发送</button>
+         <!--<van-button  wx:if="{{msgLen!==0}}"  slot="button" size="small" type="primary">发送</van-button>-->
       </view>
     </view>
   </form>

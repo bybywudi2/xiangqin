@@ -3,6 +3,7 @@ const appUrl = require("../../utils/url.js");
 Page({
   data: {
     lists: [],
+    formIds:[],
     msgLen: 0,
     openid: "1",
     match_user_openid: "1",
@@ -15,25 +16,22 @@ Page({
   },
 
   onUnload: function (options) {
-    /*var that = this;
-    var finallist;
-
-    var res = wx.getStorageSync('chatList' + that.data.match_user_openid);
-    if(res != undefined){
-      var reslist = JSON.parse(res);
-    }else{
-      var reslist = [];
-    }
-    console.log('storage=' + res);
-    finallist = reslist.concat(that.data.messages);
-    console.log(finallist);
-    finallist = JSON.stringify(finallist);*/
+    var that = this;
     console.log("match:" + this.data.match_user_openid);
     if (this.data.messages != []) {
       var finallist = JSON.stringify(this.data.messages);
       wx.setStorageSync("chatList" + this.data.match_user_openid, finallist);
     }
-    
+    wx.request({
+      url: `http://localhost:8001/matching/formIdRecieve`,
+      data: {
+        openid: that.data.openid,
+        formIds: that.data.formIds,
+      },
+      method:'POST',
+      success: function (res) {
+      }
+    })
     wx.closeSocket();
   },
 
@@ -219,7 +217,11 @@ Page({
   },
   // 聚焦
   onFocus() {},
-  sendMessage() {
+  sendMessage(e) {
+    if(this.data.formIds.length < 10){
+      this.data.formIds.push(e.detail.formId);
+    }
+    
     wx.sendSocketMessage({
       data: this.data.msg
     });
