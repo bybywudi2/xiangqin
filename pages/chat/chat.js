@@ -18,7 +18,7 @@ Page({
     /*var that = this;
     var finallist;
 
-    var res = wx.getStorageSync('chatList' + that.match_user_openid);
+    var res = wx.getStorageSync('chatList' + that.data.match_user_openid);
     if(res != undefined){
       var reslist = JSON.parse(res);
     }else{
@@ -28,10 +28,12 @@ Page({
     finallist = reslist.concat(that.data.messages);
     console.log(finallist);
     finallist = JSON.stringify(finallist);*/
+    console.log("match:" + this.data.match_user_openid);
     if (this.data.messages != []) {
       var finallist = JSON.stringify(this.data.messages);
-      wx.setStorageSync("chatList" + this.match_user_openid, finallist);
+      wx.setStorageSync("chatList" + this.data.match_user_openid, finallist);
     }
+    
     wx.closeSocket();
   },
 
@@ -39,7 +41,7 @@ Page({
     // 设置标题
   },
 
-  onReady: function (options) {
+  onShow: function (options) {
     var that = this;
     var openid = wx.getStorageSync("openid");
     var finallist = [];
@@ -48,7 +50,7 @@ Page({
     });
     this.delayPageScroll();
     wx.request({
-      url: `http://39.106.194.129/yulinlianaibar/chat/getMatchingUser`,
+      url: `http://localhost:8001/chat/getMatchingUser`,
       data: {
         openid: that.data.openid //获取openid的话 需要向后台传递code,利用code请求api获取openid
       },
@@ -56,7 +58,7 @@ Page({
         that.setData({
           match_user_openid: res.data.target_openid
         });
-        var locallist = wx.getStorageSync("chatList" + that.match_user_openid);
+        var locallist = wx.getStorageSync("chatList" + that.data.match_user_openid);
         //locallist = [];
         if (locallist == null || locallist == "") {
           locallist = [];
@@ -64,11 +66,11 @@ Page({
           locallist = JSON.parse(locallist);
         }
         wx.request({
-          url: `http://39.106.194.129/yulinlianaibar/chat/receiveMessage?openid=` +
+          url: `http://localhost:8001/chat/receiveMessage?openid=` +
             that.data.openid,
           success: function (res) {
             wx.request({
-              url: `http://39.106.194.129/yulinlianaibar/chat/receiveMessageSuccess?openid=` +
+              url: `http://localhost:8001/chat/receiveMessageSuccess?openid=` +
                 that.data.openid
             });
             console.log("redis data=");
@@ -83,7 +85,7 @@ Page({
               messages: finallist
             });
             wx.connectSocket({
-              url: `ws://39.106.194.129/yulinlianaibar/websocket` +
+              url: `ws://localhost:8001/websocket` +
                 "?openid=" +
                 that.data.openid,
               header: {

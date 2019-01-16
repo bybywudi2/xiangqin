@@ -1,0 +1,80 @@
+<!--pages/regist/regist.wxml-->
+<view class="viewTitle">
+    <text class="view-Name">信息注册</text>
+    <van-button type="primary">按钮</van-button>
+    <view class="lineView"></view>
+</view>
+<!--这里用form，name=“nameName1”可以作为form的属性进行 
+（e.detail.value.nameName1）调用,
+form自带有提交和重置按钮，会自动获取表单中所有控件值的改变-->
+<form class="page__bd" bindsubmit="formSubmit" bindreset="formReset">
+    <view class="section section_gap">
+      <view class="section__title">（必填）性别</view>
+      <radio-group name="sex">
+        <label><radio value="0"/>男</label>
+        <label><radio value="1"/>女</label>
+      </radio-group>
+    </view>
+
+    <view class="section">
+      <view class="section__title">（必填）生日</view>
+      <picker name="birthday" mode="date" value="{{date}}" start="1950-09-01" end="2019-12-31" bindchange="bindDateChange">
+        <view class="picker">
+          当前选择: {{date}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="section">
+      <view class="section__title">（必填）微信号</view>
+      <input name="userwx" style="background-color: #FFFFFF" placeholder="请点击微信右下角的按钮“我”查看微信号哦" />
+    </view>
+
+    <view class="section">
+      <view class="section__title">（必填）手机号</view>
+      <input name="phone" style="background-color: #FFFFFF" placeholder="为了让TA联系到您，请填写真实的手机号哦" />
+    </view>
+
+
+   <view class="section">
+  <view class="section__title">（必填）您的家乡在哪里？</view>
+  <picker
+    name="hometown"
+    mode="multiSelector"
+    bindchange="bindMultiPickerChange"
+    bindcolumnchange="bindMultiPickerColumnChange"
+    value="{{multiIndex}}"
+    range="{{multiArray}}"
+  >
+    <view class="picker">
+      当前选择：{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}，{{multiArray[2][multiIndex[2]]}}
+    </view>
+  </picker>
+</view>
+
+    <view class="section">
+      <view class="section__title">（必填）自我介绍</view>
+      <textarea name="standard" style="background-color: #FFFFFF" placeholder="为了让TA注意到你，请准备一个200字以内的自我介绍哦" />
+    </view>
+
+    <view class="section section_gap">
+      <view class="section__title">（选填）身高(cm)</view>
+      <slider min="100" max="249" value="150" name="height" show-value ></slider>
+    </view>
+
+    <view class="section section_gap">
+      <view class="section__title">（选填）体重(kg)</view>
+      <slider min="0" max="200" value="50" name="weight" show-value ></slider>
+    </view>
+
+    <view class="section">
+      <view class="section__title">（选填）职业</view>
+      <input name="job" style="background-color: #FFFFFF" placeholder="如果是学生，请填写学生" />
+    </view>
+
+<view hidden='true' class="section__title"><input name="openid" value='{{openid}}' style="background-color: #FFFFFF" placeholder="" /></view> 
+
+    <view class="btn-area">
+      <button form-type="submit">Submit提交</button>
+    </view>
+  </form>

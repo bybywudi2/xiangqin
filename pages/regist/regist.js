@@ -36,7 +36,7 @@ Page({
 
     wx.request({
       //url: app.globalData.getopenid_url,
-      url: `http://${appUrl[appUrl.env]}/regist/userInfoRegist`,
+      url: `http://localhost:8001/regist/userInfoRegist`,
       data: {
         'birthday': e.detail.value.birthday,
         'company': e.detail.value.company,
@@ -62,7 +62,7 @@ Page({
         console.info("succ!");
 
         wx.uploadFile({
-            url: `http://${appUrl[appUrl.env]}/regist/photoupload`,
+            url: `http://localhost:8001/regist/photoupload`,
             filePath: e.detail.value.photo_self_path,
             name: 'file',
             header: {
@@ -85,7 +85,7 @@ Page({
           }),
 
           wx.uploadFile({
-            url: `http://${appUrl[appUrl.env]}/regist/photoupload`,
+            url: `http://localhost:8001/regist/photoupload`,
             filePath: e.detail.value.photo_others_path,
             name: 'file',
             header: {

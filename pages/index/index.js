@@ -10,14 +10,17 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    openid: '1'
+    openid: '1',
+    hasRegist:false,
+    isReady:false,
+    isMatching:false,
   },
   globalData: {
     appid: 'wx782d693b3649f4fa',
     secret: 'a41a51a058f6a7ca83dbe0450e6b2147',
     //local_getopenid_url:'http://localhost:8001/login/getOpenId',
     //test_getopenid_url:'http://39.106.194.129:8080/yulinlianaibar/login/getOpenId'
-    getopenid_url: `http://39.106.194.129/yulinlianaibar/login/getOpenId`,
+    getopenid_url: `http://localhost:8001/login/getOpenId`,
     openid: '1',
   },
 
@@ -31,13 +34,53 @@ Page({
   //跳转注册
   toRegist: function () {
     wx.navigateTo({
-      url: '../regist/regist'
+      url: '../simpleregist/simpleregist'
     })
   },
 
   toChat: function () {
     wx.navigateTo({
       url: '../chat/chat'
+    })
+  },
+
+  onShow:function(){
+    var that = this;
+    wx.request({
+      url: 'http://localhost:8001/regist/getUserStatus' + '/' + that.data.openid,
+      success: function (res) {
+        console.log(res);
+        if (res.data.hasRegist == 1) {
+          that.setData({
+            hasRegist: true
+          })
+        } else {
+          that.setData({
+            hasRegist: false
+          })
+        }
+
+        if (res.data.isReady == 1) {
+          that.setData({
+            isReady: true
+          })
+        } else {
+          that.setData({
+            isReady: false
+          })
+        }
+
+        if (res.data.isMatching == 1) {
+          that.setData({
+            isMatching: true
+          })
+        } else {
+          that.setData({
+            isMatching: false
+          })
+        }
+
+      }
     })
   },
 
@@ -48,6 +91,47 @@ Page({
       success: function (res) {
         that.setData({
           openid: res.data,
+        })
+        wx.request({
+          url: 'http://localhost:8001/regist/getUserStatus'+'/'+that.data.openid,
+          success: function (res) {
+            console.log(res);
+            if (res.data.hasRegist == 1){
+              that.setData({
+                hasRegist: true
+              })
+            }else{
+              that.setData({
+                hasRegist: false
+              })
+            }
+            
+            if (res.data.isReady == 1) {
+              that.setData({
+                isReady: true
+              })
+            } else {
+              that.setData({
+                isReady: false
+              })
+            }
+
+            if (res.data.isMatching == 1) {
+              that.setData({
+                isMatching: true
+              })
+
+              wx.navigateTo({
+                url: '../chat/chat'
+              })
+
+            } else {
+              that.setData({
+                isMatching: false
+              })
+            }
+
+          }
         })
       },
     })
@@ -95,7 +179,7 @@ Page({
               success: function (res_user) {
                 wx.request({
                   //url: getopenid_url,
-                  url: `http://39.106.194.129/yulinlianaibar/login/getOpenId`,
+                  url: `http://localhost:8001/login/getOpenId`,
                   data: {
                     code: res.code, //获取openid的话 需要向后台传递code,利用code请求api获取openid
                     headurl: res_user.userInfo.avatarUrl, //这些是用户的基本信息
@@ -134,7 +218,7 @@ Page({
             wx.getUserInfo({
               success: function (res_user) {
                 wx.request({
-                  url: `http://39.106.194.129/yulinlianaibar/login/getOpenId`,
+                  url: `http://localhost:8001/login/getOpenId`,
                   //url: app.globalData.getopenid_url,
                   data: {
                     code: res.code, //获取openid的话 需要向后台传递code,利用code请求api获取openid
@@ -165,8 +249,25 @@ Page({
   },
 
   readyForMatch: function (e) {
-    console.log('GG 敌方军团已同意投降 4票赞成 0票反对')
-    console.log(e.detail.formId);
+    var that = this;
+    wx.request({
+      url: `http://localhost:8001/matching/ready`,
+      data: {
+        openid: that.data.openid, 
+        formId: e.detail.formId, 
+      },
+      success: function (res) {
+        that.setData({
+          isReady: true
+        })
+      }
+    })
+  },
+
+  setHasRegist() {
+    this.setData({
+      hasRegist: true
+    });
   },
 
 
