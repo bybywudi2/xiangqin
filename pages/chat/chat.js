@@ -3,7 +3,7 @@ const appUrl = require("../../utils/url.js");
 Page({
   data: {
     lists: [],
-    formIds:[],
+    formIds: [],
     msgLen: 0,
     openid: "1",
     match_user_openid: "1",
@@ -28,15 +28,17 @@ Page({
         openid: that.data.openid,
         formIds: that.data.formIds,
       },
-      method:'POST',
-      success: function (res) {
-      }
+      method: 'POST',
+      success: function (res) {}
     })
     wx.closeSocket();
   },
 
   onLoad(option) {
     // 设置标题
+    wx.setNavigationBarTitle({
+      title: "匿名聊天"
+    });
   },
 
   onShow: function (options) {
@@ -218,10 +220,10 @@ Page({
   // 聚焦
   onFocus() {},
   sendMessage(e) {
-    if(this.data.formIds.length < 10){
+    if (this.data.formIds.length < 10) {
       this.data.formIds.push(e.detail.formId);
     }
-    
+
     wx.sendSocketMessage({
       data: this.data.msg
     });
