@@ -39,8 +39,35 @@ Page({
   },
   //表单提交按钮
   formSubmit: function (e) {
-    console.log(e.detail.value.phone)
-    console.log(e.detail.value.userwx)
+    function valnumber(x) {
+      if (~~x != x) {
+        return false
+      }
+      return true
+    }
+
+    if (!valnumber(e.detail.value.phone)) {
+      console.log(e.detail.value.phone)
+      Toast("电话必须是数字")
+      this.setData({
+        phone: ''
+      })
+      return
+    }
+    if (!valnumber(e.detail.value.height)) {
+      Toast("身高必须是数字")
+      this.setData({
+        height: ''
+      })
+      return
+    }
+    if (!valnumber(e.detail.value.weight)) {
+      Toast("体重必须是数字")
+      this.setData({
+        weight: ''
+      })
+      return
+    }
     if (e.detail.value.birthday.trim() == '' || e.detail.value.hometown == '' || e.detail.value.phone.trim() == '' ||
       e.detail.value.sex.trim() == '' || e.detail.value.standard.trim() == '' || e.detail.value.userwx.trim() == '') {
       wx.showModal({
@@ -118,6 +145,7 @@ Page({
       }
     })
   },
+
   onClickIcon() {
     Toast('请点击微信右下角的按钮“我”查看微信号哦');
   },

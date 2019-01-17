@@ -81,13 +81,13 @@ form自带有提交和重置按钮，会自动获取表单中所有控件值的�
    <textarea id="textarea" name="standard" style="background-color: #FFFFFF" placeholder="请准备一个200字以内的自我介绍哦" />
 </van-cell>
     <van-field
-    class="form-input"
+    type="tel"
     value="{{ weight}}"
     clearable
     label="体重"
     placeholder="（选填）体重(kg)"
     name="weight"
-    type="number"
+    
     />
     <van-field
     class="form-input"
@@ -96,7 +96,8 @@ form自带有提交和重置按钮，会自动获取表单中所有控件值的�
     label="身高"
     placeholder="（选填）身高(cm)"
     name="height"
-    type="number"
+    type="tel"
+    id="height"
     />
     <van-field
     class="form-input"
@@ -106,7 +107,6 @@ form自带有提交和重置按钮，会自动获取表单中所有控件值的�
     placeholder="如果是学生，请填写学生"
     name="job"
     />
-
 <view hidden='true' class="section__title"><input name="openid" value='{{openid}}' style="background-color: #FFFFFF" placeholder="" /></view> 
 
     <view class="btn-area">
