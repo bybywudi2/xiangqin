@@ -1,6 +1,6 @@
 <!--index.wxml-->
   <van-notice-bar
-  wx:if="{{isMatching}}"
+  wx:if="{{!isMatching && isReady}}"
   left-icon="https://img.yzcdn.cn/1.png"
   text="匹配中...现在可以关闭小程序，匹配成功后会发服务通知给您"
 />
