@@ -1,6 +1,6 @@
 <!--pages/regist/regist.wxml-->
 <view class="viewTitle">
-    <text class="view-Name">信息注册</text>
+    <text class="view-Name">信息填写</text>
 </view>
 <!--这里用form，name=“nameName1”可以作为form的属性进行 
 （e.detail.value.nameName1）调用,
@@ -110,7 +110,7 @@ form自带有提交和重置按钮，会自动获取表单中所有控件值的�
 <view hidden='true' class="section__title"><input name="openid" value='{{openid}}' style="background-color: #FFFFFF" placeholder="" /></view> 
 
     <view class="btn-area">
-      <button form-type="submit">Submit提交</button>
+      <button form-type="submit">提交</button>
     </view>
   </form>
 <van-toast id="van-toast" />

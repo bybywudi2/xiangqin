@@ -34,7 +34,7 @@
   <view class="usermotto">
     <van-tabbar active="{{ active }}" bind:change="onChange">
     <van-tabbar-item icon="home-o">主页</van-tabbar-item>
-    <van-tabbar-item bindtap="toRegist" icon="setting-o">修改资料</van-tabbar-item>
+    <van-tabbar-item wx:if="{{hasRegist}}"bindtap="toRegist" icon="setting-o">修改资料</van-tabbar-item>
     </van-tabbar>
   </view>
 </view>
