@@ -78,9 +78,9 @@ Page({
             } else {
               finallist = locallist;
             }
-
+            var finallist_reverse = finallist.reverse();
             that.setData({
-              messages: finallist
+              messages: finallist_reverse
             });
             wx.connectSocket({
               url: `wss://yulinweb.xyz/yulinlianaibar/websocket` +
