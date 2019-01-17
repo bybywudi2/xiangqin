@@ -1,20 +1,29 @@
 // pages/regist/regist.js
 const appUrl = require('../../utils/url.js')
 const app = getApp()
-
+import Toast from '../../components/van/dist/toast/toast'
 Page({
   //初始化数据
   data: {
-    multiArray: [['陕北', '其他'], ['榆林市', '延安市'], ['榆阳区', '府谷', '神木', '定边', '靖边', '横山', '米脂', '佳县', '子洲', '吴堡', '绥德', '清涧']],
+    multiArray: [
+      ['陕北', '其他'],
+      ['榆林市', '延安市'],
+      ['榆阳区', '府谷', '神木', '定边', '靖边', '横山', '米脂', '佳县', '子洲', '吴堡', '绥德', '清涧']
+    ],
     multiIndex: [0, 0, 0],
     locations: ['榆阳区', '府谷', '神木', '定边', '靖边', '横山', '米脂', '佳县', '子洲', '吴堡', '绥德', '清涧'],
-    
+
     educations: ['保密', '小学', '初中', '高中', '专科', '本科', '硕士', '博士'],
     index: 0,
     date: '1990-06-15',
     time: '11:19',
     allValue: '',
     openid: '1',
+    userwx: '',
+    phone: '',
+    job: '',
+    height: '',
+    weight: ''
   },
 
   onLoad: function () {
@@ -30,38 +39,39 @@ Page({
   },
   //表单提交按钮
   formSubmit: function (e) {
-    if (e.detail.value.birthday.trim() == '' || e.detail.value.hometown == '' || e.detail.value.phone.trim() == ''
-      || e.detail.value.sex.trim() == '' || e.detail.value.standard.trim() == '' || e.detail.value.userwx.trim() == ''){
-        wx.showModal({
-          title: "必填项缺少",
-          content: "必填选项不能为空！",
-          success: function (res) {
-          }
-        });
-      }else{
-        wx.request({
-          //url: app.globalData.getopenid_url,
-          url: `https://yulinweb.xyz/yulinlianaibar/regist/userInfoSimpleRegist`,
-          data: {
-            'birthday': e.detail.value.birthday,
-            'height': e.detail.value.height,
-            'hometown': e.detail.value.hometown,
-            'job': e.detail.value.job,
-            'openid': e.detail.value.openid,
-            'phone': e.detail.value.phone,
-            'sex': e.detail.value.sex,
-            'standard': e.detail.value.standard,
-            'userwx': e.detail.value.userwx,
-            'weight': e.detail.value.weight,
-          },
-          success: function (res) {
-            wx.navigateTo({
-              url: '../index/index'
-            })
-          }
-        })
-      }
-   
+    console.log(e.detail.value.phone)
+    console.log(e.detail.value.userwx)
+    if (e.detail.value.birthday.trim() == '' || e.detail.value.hometown == '' || e.detail.value.phone.trim() == '' ||
+      e.detail.value.sex.trim() == '' || e.detail.value.standard.trim() == '' || e.detail.value.userwx.trim() == '') {
+      wx.showModal({
+        title: "必填项缺少",
+        content: "必填选项不能为空！",
+        success: function (res) {}
+      });
+    } else {
+      wx.request({
+        //url: app.globalData.getopenid_url,
+        url: `https://yulinweb.xyz/yulinlianaibar/regist/userInfoSimpleRegist`,
+        data: {
+          'birthday': e.detail.value.birthday,
+          'height': e.detail.value.height,
+          'hometown': e.detail.value.hometown,
+          'job': e.detail.value.job,
+          'openid': e.detail.value.openid,
+          'phone': e.detail.value.phone,
+          'sex': e.detail.value.sex,
+          'standard': e.detail.value.standard,
+          'userwx': e.detail.value.userwx,
+          'weight': e.detail.value.weight,
+        },
+        success: function (res) {
+          wx.navigateTo({
+            url: '../index/index'
+          })
+        }
+      })
+    }
+
 
 
 
@@ -108,6 +118,9 @@ Page({
       }
     })
   },
+  onClickIcon() {
+    Toast('请点击微信右下角的按钮“我”查看微信号哦');
+  },
   bindMultiPickerChange(e) {
     console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
@@ -144,7 +157,7 @@ Page({
                 data.multiArray[2] = ['榆阳区', '府谷', '神木', '定边', '靖边', '横山', '米脂', '佳县', '子洲', '吴堡', '绥德', '清涧']
                 break
               case 1:
-                data.multiArray[2] = ['宝塔区','吴旗县','志丹县','安塞县','子长县','延川县','延长县','甘泉县','富县','洛川县','黄陵县','黄龙县','宜川县']
+                data.multiArray[2] = ['宝塔区', '吴旗县', '志丹县', '安塞县', '子长县', '延川县', '延长县', '甘泉县', '富县', '洛川县', '黄陵县', '黄龙县', '宜川县']
                 break
             }
             break
