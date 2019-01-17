@@ -41,7 +41,7 @@ Page({
       }else{
         wx.request({
           //url: app.globalData.getopenid_url,
-          url: `http://localhost:8001/regist/userInfoSimpleRegist`,
+          url: `https://yulinweb.xyz/yulinlianaibar/regist/userInfoSimpleRegist`,
           data: {
             'birthday': e.detail.value.birthday,
             'height': e.detail.value.height,

@@ -17,13 +17,13 @@ Page({
 
   onUnload: function (options) {
     var that = this;
-    console.log("match:" + this.data.match_user_openid);
+    console.log("formIds=:" + this.data.formIds);
     if (this.data.messages != []) {
       var finallist = JSON.stringify(this.data.messages);
       wx.setStorageSync("chatList" + this.data.match_user_openid, finallist);
     }
     wx.request({
-      url: `http://localhost:8001/matching/formIdRecieve`,
+      url: `https://yulinweb.xyz/yulinlianaibar/matching/formIdRecieve`,
       data: {
         openid: that.data.openid,
         formIds: that.data.formIds,
@@ -48,7 +48,7 @@ Page({
     });
     this.delayPageScroll();
     wx.request({
-      url: `http://localhost:8001/chat/getMatchingUser`,
+      url: `https://yulinweb.xyz/yulinlianaibar/chat/getMatchingUser`,
       data: {
         openid: that.data.openid //获取openid的话 需要向后台传递code,利用code请求api获取openid
       },
@@ -64,11 +64,11 @@ Page({
           locallist = JSON.parse(locallist);
         }
         wx.request({
-          url: `http://localhost:8001/chat/receiveMessage?openid=` +
+          url: `https://yulinweb.xyz/yulinlianaibar/chat/receiveMessage?openid=` +
             that.data.openid,
           success: function (res) {
             wx.request({
-              url: `http://localhost:8001/chat/receiveMessageSuccess?openid=` +
+              url: `https://yulinweb.xyz/yulinlianaibar/chat/receiveMessageSuccess?openid=` +
                 that.data.openid
             });
             console.log("redis data=");
@@ -83,7 +83,7 @@ Page({
               messages: finallist
             });
             wx.connectSocket({
-              url: `ws://localhost:8001/websocket` +
+              url: `wss://yulinweb.xyz/yulinlianaibar/websocket` +
                 "?openid=" +
                 that.data.openid,
               header: {
@@ -125,7 +125,7 @@ Page({
           openid: res.data,
         })
         wx.request({
-          url: 'http://localhost:8001/chat/getMatchingUser',
+          url: 'https://yulinweb.xyz/yulinlianaibar/chat/getMatchingUser',
           data: {
             openid: that.data.openid,//获取openid的话 需要向后台传递code,利用code请求api获取openid
           },
