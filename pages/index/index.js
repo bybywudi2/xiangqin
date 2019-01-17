@@ -11,9 +11,9 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     openid: '1',
-    hasRegist:false,
-    isReady:false,
-    isMatching:false,
+    hasRegist: false,
+    isReady: false,
+    isMatching: false,
   },
   globalData: {
     appid: 'wx782d693b3649f4fa',
@@ -44,8 +44,9 @@ Page({
     })
   },
 
-  onShow:function(){
+  onShow: function () {
     var that = this;
+    that.toChat();
     wx.request({
       url: 'https://yulinweb.xyz/yulinlianaibar/regist/getUserStatus' + '/' + that.data.openid,
       success: function (res) {
@@ -93,19 +94,19 @@ Page({
           openid: res.data,
         })
         wx.request({
-          url: 'https://yulinweb.xyz/yulinlianaibar/regist/getUserStatus'+'/'+that.data.openid,
+          url: 'https://yulinweb.xyz/yulinlianaibar/regist/getUserStatus' + '/' + that.data.openid,
           success: function (res) {
             console.log(res);
-            if (res.data.hasRegist == 1){
+            if (res.data.hasRegist == 1) {
               that.setData({
                 hasRegist: true
               })
-            }else{
+            } else {
               that.setData({
                 hasRegist: false
               })
             }
-            
+
             if (res.data.isReady == 1) {
               that.setData({
                 isReady: true
@@ -250,12 +251,12 @@ Page({
 
   readyForMatch: function (e) {
     var that = this;
-    console.log('formId='+e.detail.formId);
+    console.log('formId=' + e.detail.formId);
     wx.request({
       url: `https://yulinweb.xyz/yulinlianaibar/matching/ready`,
       data: {
-        openid: that.data.openid, 
-        formId: e.detail.formId, 
+        openid: that.data.openid,
+        formId: e.detail.formId,
       },
       success: function (res) {
         that.setData({
