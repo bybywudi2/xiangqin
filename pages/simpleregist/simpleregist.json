@@ -1,3 +1,8 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "van-field": "/components/van/dist/field/index",
+    "van-toast": "/components/van/dist/toast/index",
+    "van-cell": "/components/van/dist/cell/index",
+    "van-cell-group": "/components/van/dist/cell-group/index"
+  }
 }

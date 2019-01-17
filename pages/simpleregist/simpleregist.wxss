@@ -1,1 +1,9 @@
 /* pages/simpleregist/simpleregist.wxss */
+page{
+    background:#f5f7f9;
+}
+#textarea {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-all;
+}
