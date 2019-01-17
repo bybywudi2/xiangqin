@@ -25,7 +25,7 @@
          />
       </view>
       <view class="chat-input-other">
-        <button wx:if="{{msgLen!==0}}"   slot="button" size="small" type="primary" form-type="submit">发送</button>
+        <button id="submit-button" wx:if="{{msgLen!==0}}"   slot="button" size="small" type="primary" form-type="submit">发送</button>
          <!--<van-button  wx:if="{{msgLen!==0}}"  slot="button" size="small" type="primary">发送</van-button>-->
       </view>
     </view>

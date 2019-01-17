@@ -1,10 +1,13 @@
 /**chat.wxss**/
 @import "../../components/bubble/bubble.wxss";
-.chat-container{
-  
+page{
+  height: 100%;
+}
+#chat-container{
+height: 100%;
 }
 .chat-content {
-  height: 1302rpx;
+  height: 1098rpx;
   width: 100%;
   flex: 1;
   overflow: scroll;
@@ -30,14 +33,21 @@
   padding: 0 16rpx;
 }
 .chat-input-main > input {
-  height: 46rpx;
-  line-height: 46rpx;
+  height: 52rpx;
+  line-height: 52rpx;
   background-color: #fff;
   border-radius: 12rpx;
   padding: 10rpx;
   border: 1rpx solid #d6d7d9;
-  font-size: 14px;
+  font-size: 28rpx;
 }
 .chat-input-other {
   width: 140rpx;
+}
+
+#submit-button{
+  height: 74rpx;
+  border: 1rpx solid #d6d7d9;
+  border-radius: 12rpx;
+  font-size: 28rpx;
 }
