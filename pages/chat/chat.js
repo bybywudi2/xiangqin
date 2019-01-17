@@ -15,7 +15,7 @@ Page({
     isFirstSend: true // 是否第一次发送消息(区分历史和新加)
   },
 
-  onUnload: function (options) {
+  onHide: function (options) {
     var that = this;
     console.log("formIds=:" + this.data.formIds);
     if (this.data.messages != []) {
@@ -30,6 +30,25 @@ Page({
       },
       method: 'POST',
       success: function (res) {}
+    })
+    wx.closeSocket();
+  },
+
+  onUnload: function (options) {
+    var that = this;
+    console.log("formIds=:" + this.data.formIds);
+    if (this.data.messages != []) {
+      var finallist = JSON.stringify(this.data.messages);
+      wx.setStorageSync("chatList" + this.data.match_user_openid, finallist);
+    }
+    wx.request({
+      url: `https://yulinweb.xyz/yulinlianaibar/matching/formIdRecieve`,
+      data: {
+        openid: that.data.openid,
+        formIds: that.data.formIds,
+      },
+      method: 'POST',
+      success: function (res) { }
     })
     wx.closeSocket();
   },
@@ -76,13 +95,13 @@ Page({
             console.log("redis data=");
             console.log(res.data);
             if (res.data.messages != undefined) {
-              finallist = locallist.concat(res.data.messages);
+              redis_data_reverse = 
+              finallist = locallist.concat(res.data.messages.reverse());
             } else {
               finallist = locallist;
             }
-            var finallist_reverse = finallist.reverse();
             that.setData({
-              messages: finallist_reverse
+              messages: finallist
             });
             wx.connectSocket({
               url: `wss://yulinweb.xyz/yulinlianaibar/websocket` +
