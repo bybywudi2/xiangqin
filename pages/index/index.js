@@ -46,7 +46,6 @@ Page({
 
   onShow: function () {
     var that = this;
-    that.toChat();
     wx.request({
       url: 'https://yulinweb.xyz/yulinlianaibar/regist/getUserStatus' + '/' + that.data.openid,
       success: function (res) {
