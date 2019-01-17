@@ -1,8 +1,8 @@
 {
   "usingComponents": {
-      "van-tabbar": "/components/van/dist/tabbar/index",
-      "van-tabbar-item": "/components/van/dist/tabbar-item/index",
-      "van-notify": "/components/van/dist/notify/index",
-      "van-notice-bar": "/components/van/dist/notice-bar/index"
+    "van-tabbar": "/components/van/dist/tabbar/index",
+    "van-tabbar-item": "/components/van/dist/tabbar-item/index",
+    "van-notify": "/components/van/dist/notify/index",
+    "van-notice-bar": "/components/van/dist/notice-bar/index"
   }
 }

@@ -19,3 +19,15 @@
 .usermotto {
   margin-top: 200px;
 }
+button{
+  border: 1px solid #00cc66;
+  background: #FFF;
+  color:#00cc66;
+  margin-top: 20rpx;
+}
+
+#tips{
+  margin-top: 20rpx;
+  width: 80%;
+
+}
